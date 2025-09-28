@@ -14,5 +14,4 @@ class Empresa(Base):
     ramo_atuacao = Column(String, nullable=False)
     telefone = Column(String, nullable=False)
     email_contato = Column(String, unique=True, nullable=True)
-    contato = Column(String, nullable=True)
     data_cadastro = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
