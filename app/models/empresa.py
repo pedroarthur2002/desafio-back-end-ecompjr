@@ -1,17 +1,20 @@
-from datetime import datetime, timezone
-from sqlalchemy import Column, String, Integer, DateTime
-from sqlalchemy.orm import declarative_base
+from datetime import datetime
+from sqlalchemy import func
+from sqlalchemy.orm import Mapped, mapped_column, registry
 
-Base = declarative_base()
+table_registry = registry()
 
-class Empresa(Base):
+#Base = declarative_base()
+
+@table_registry.mapped_as_dataclass
+class Empresa():
     __tablename__ = "empresas"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    nome = Column(String, nullable=False)
-    cnpj = Column(String, unique=True, nullable=False)
-    cidade = Column(String, nullable=False)
-    ramo_atuacao = Column(String, nullable=False)
-    telefone = Column(String, nullable=False)
-    email_contato = Column(String, unique=True, nullable=True)
-    data_cadastro = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    id: Mapped[int] = mapped_column(init = False, primary_key=True)
+    nome: Mapped[str] = mapped_column(nullable=False)
+    cnpj: Mapped[str] = mapped_column(unique=True, nullable=False)
+    cidade: Mapped[str] = mapped_column(nullable=False)
+    ramo_atuacao: Mapped[str] = mapped_column(nullable=False)
+    telefone: Mapped[str] = mapped_column(nullable=False)
+    email_contato: Mapped[str] = mapped_column(unique=True, nullable=False)
+    data_cadastro: Mapped[datetime] = mapped_column(init=False, server_default=func.now())
