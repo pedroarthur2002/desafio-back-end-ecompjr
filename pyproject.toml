@@ -1,5 +1,5 @@
 [project]
-name = "api-empresa-ecompjr"
+name = "desafio-back-end-ecompjr"
 version = "0.1.0"
 description = ""
 authors = [
@@ -10,7 +10,9 @@ requires-python = ">=3.13"
 dependencies = [
     "pydantic-settings (>=2.11.0,<3.0.0)",
     "sqlalchemy (>=2.0.43,<3.0.0)",
-    "fastapi[standard] (>=0.117.1,<0.118.0)"
+    "uvicorn[standard] (>=0.37.0,<0.38.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
+    "fastapi[standard] (>=0.118.0,<0.119.0)"
 ]
 
 
