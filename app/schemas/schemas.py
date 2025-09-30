@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from typing import ClassVar
+from datetime import datetime
 
 
 def validar_cnpj(cnpj: str) -> bool:
@@ -45,5 +46,5 @@ class EmpresaCreate(EmpresaBase):
 
 class EmpresaResponse(EmpresaBase):
     id: int
-    data_de_cadastro: str
+    data_cadastro: datetime
 

@@ -4,8 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column, registry
 
 table_registry = registry()
 
-#Base = declarative_base()
-
 @table_registry.mapped_as_dataclass
 class Empresa():
     __tablename__ = "empresas"
