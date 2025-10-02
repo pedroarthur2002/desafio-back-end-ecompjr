@@ -1,6 +1,7 @@
 from http import HTTPStatus
 from fastapi import HTTPException, FastAPI, Depends
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 from app.models.empresa import Empresa, table_registry
 from app.schemas.schemas import EmpresaCreate, EmpresaResponse
 from app.models.empresa import Empresa
@@ -15,7 +16,7 @@ def read_root():
     return {'message': 'Olá, mundo!'}
 
 @app.post('/empresas/', response_model=EmpresaResponse, status_code=HTTPStatus.CREATED)
-def create_firm(empresa: EmpresaCreate, session = Depends(get_session)):
+def create_empresa(empresa: EmpresaCreate, session = Depends(get_session)):
 
     db_empresa = session.scalar(
         select(Empresa).where((Empresa.cnpj == empresa.cnpj) | (Empresa.email_contato == empresa.email_contato))
@@ -33,3 +34,8 @@ def create_firm(empresa: EmpresaCreate, session = Depends(get_session)):
         session.refresh(db_empresa)
 
     return db_empresa
+
+@app.get('/empresas/',response_model=list[EmpresaResponse] ,status_code=HTTPStatus.OK)
+def get_empresas(session: Session = Depends(get_session)):
+    empresas = session.scalars(select(Empresa)).all()
+    return empresas

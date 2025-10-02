@@ -47,4 +47,3 @@ class EmpresaCreate(EmpresaBase):
 class EmpresaResponse(EmpresaBase):
     id: int
     data_cadastro: datetime
-
