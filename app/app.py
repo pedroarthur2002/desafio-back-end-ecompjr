@@ -15,6 +15,7 @@ table_registry.metadata.create_all(engine)
 def read_root():
     return {'message': 'Olá, mundo!'}
 
+
 @app.post('/empresas/', response_model=EmpresaResponse, status_code=HTTPStatus.CREATED)
 def create_empresa(empresa: EmpresaCreate, session = Depends(get_session)):
 
@@ -24,9 +25,9 @@ def create_empresa(empresa: EmpresaCreate, session = Depends(get_session)):
 
     if db_empresa:
         if db_empresa.cnpj == empresa.cnpj:
-            raise HTTPException(status_code=HTTPStatus.CONFLICT)
+            raise HTTPException(status_code=HTTPStatus.CONFLICT, detail="Já há uma empresa com esse CNPJ")
         elif db_empresa.email_contato == empresa.email_contato:
-            raise HTTPException(status_code=HTTPStatus.CONFLICT)
+            raise HTTPException(status_code=HTTPStatus.CONFLICT, detail="Já há uma empresa com esse email de contato")
     else:
         db_empresa = Empresa(**empresa.model_dump())
         session.add(db_empresa)
@@ -34,6 +35,7 @@ def create_empresa(empresa: EmpresaCreate, session = Depends(get_session)):
         session.refresh(db_empresa)
 
     return db_empresa
+
 
 @app.get('/empresas/',response_model=list[EmpresaResponse] ,status_code=HTTPStatus.OK)
 def get_empresas(session: Session = Depends(get_session)):
@@ -48,3 +50,16 @@ def get_empresa_by_id(id: int, session: Session = Depends(get_session)):
     if not db_empresa:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Não há empresa com esse id")
     return db_empresa
+
+
+@app.delete('/empresas/{id}', status_code=HTTPStatus.NO_CONTENT)
+def delete_empresa(id: int, session: Session = Depends(get_session)):
+    db_empresa = session.scalar(select(Empresa).where(Empresa.id == id))
+
+    if not db_empresa:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Não há empresa com esse id")
+    
+    session.delete(db_empresa)
+    session.commit
+
+    return
