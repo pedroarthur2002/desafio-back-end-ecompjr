@@ -45,5 +45,7 @@ class EmpresaCreate(EmpresaBase):
         return v
 
 class EmpresaResponse(EmpresaBase):
+    cnpj: str
+    email_contato: EmailStr
     id: int
     data_cadastro: datetime

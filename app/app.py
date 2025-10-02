@@ -39,3 +39,12 @@ def create_empresa(empresa: EmpresaCreate, session = Depends(get_session)):
 def get_empresas(session: Session = Depends(get_session)):
     empresas = session.scalars(select(Empresa)).all()
     return empresas
+
+
+@app.get('/empresas/{id}', response_model=EmpresaResponse, status_code=HTTPStatus.OK)
+def get_empresa_by_id(id: int, session: Session = Depends(get_session)):
+    db_empresa = session.scalar(select(Empresa).where(Empresa.id == id))
+
+    if not db_empresa:
+        raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="Não há empresa com esse id")
+    return db_empresa
