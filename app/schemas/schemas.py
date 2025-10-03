@@ -49,3 +49,6 @@ class EmpresaResponse(EmpresaBase):
     email_contato: EmailStr
     id: int
     data_cadastro: datetime
+
+class EmpresaUpdate(EmpresaBase):
+    email_contato: EmailStr
